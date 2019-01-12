@@ -47,6 +47,8 @@ def get_ratings(script):
 
 @app.route("/rating", methods=["POST"])
 def create_rating():
+    if Rating.query.filter_by(script=request.json["script"], username=request.json["username"]).scalar() is not None:
+        return jsonify({"message" : "Rating already exists!"})
     rating = request.json["rating"]
     script = request.json["script"]
     username = request.json["username"]
@@ -59,6 +61,8 @@ def create_rating():
 @app.route("/rating", methods=["PUT"])
 def update_rating():
     rating = Rating.query.filter_by(script=request.json["script"], username=request.json["username"]).first()
+    if rating is None:
+        return jsonify({"message" : "Rating does not exist!"})
     rating.rating = request.json["rating"]
     sb.session.commit()
     return rating_schema.jsonify(rating)
@@ -67,6 +71,8 @@ def update_rating():
 @app.route("/rating", methods=["DELETE"])
 def delete_rating():
     rating = Rating.query.filter_by(script=request.json["script"], username=request.json["username"]).first()
+    if rating is None:
+        return jsonify({"message" : "Rating does not exist!"})
     db.session.delete(rating)
     db.session.commit()
     return rating_schema.jsonify(rating)
