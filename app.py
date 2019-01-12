@@ -22,9 +22,9 @@ class Rating(db.Model):
         self.username = username
 
 
- class RatingSchema(ma.Schema):
-     class Meta:
-         fields = ("id", "rating", "scrpt", "username")   
+class RatingSchema(ma.Schema):
+    class Meta:
+        fields = ("id", "rating", "script", "username")   
 
 
 rating_schema = RatingSchema(strict=True)
